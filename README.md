@@ -9,7 +9,7 @@ Dependencies
 - Spring Boot DevTools
 - Spring Web
 - Lombok
-- Spring Data MongoDB
+- Spring Data JPA
 - Spring Security
 - OAuth2 Resource Server
 
