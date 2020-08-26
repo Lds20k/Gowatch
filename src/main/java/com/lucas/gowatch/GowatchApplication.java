@@ -13,16 +13,20 @@ public class GowatchApplication {
 	// Used to test mapping, save and get data from db
 	// Remove after
 	//@Bean
-	//public ApplicationRunner applicationRunner(ChannelRepository channelRepository, VideoRepository videoRepository){
+	//public ApplicationRunner applicationRunner(ChannelRepository channelRepository, VideoRepository videoRepository, RatingRepository ratingRepository){
 	//	return args -> {
-	//		Channel channel = new Channel("testeChannel", "teste@email.com", "teste_pass", "teste about", "São Paulo/Brasil");
-	//		channelRepository.save(channel);
+	//		//Channel channel = new Channel("testeChannel", "teste@email.com", "teste_pass", "teste about", "São Paulo/Brasil");
+	//		//channelRepository.save(channel);
 	//
-	//		Video video = new Video("teste", "teste", "teste", channel);
-	//		videoRepository.save(video);
+	//		//Video video = new Video("teste", "teste", "teste", channel);
+	//		//videoRepository.save(video);
 	//
-	//		System.out.println(videoRepository.findById(Integer.toUnsignedLong(1)).get().getChannel());
-	//		System.out.println(channelRepository.findById(Integer.toUnsignedLong(1)).get().getVideos());
+	//		//Rating rating = new Rating(videoRepository.findById(1L).get(), channelRepository.findById(1L).get(), "like");
+	//		//ratingRepository.save(rating);
+	//
+	//		System.out.println(videoRepository.findById(1L));
+	//		System.out.println(channelRepository.findById(1L));
+	//		System.out.println(ratingRepository.findById(1L));
 	//	};
 	//}
 }

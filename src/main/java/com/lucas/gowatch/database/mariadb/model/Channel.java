@@ -38,6 +38,9 @@ public class Channel {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "channel", fetch = FetchType.LAZY)
     private Set<Video> videos;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "channel", fetch = FetchType.LAZY)
+    private Set<Rating> ratingVideos;
+
     public Channel(String username, String email, String password, String about,String location){
         this.username = username;
         this.email = email;

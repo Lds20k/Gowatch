@@ -1,12 +1,11 @@
 package com.lucas.gowatch.database.mariadb.model;
 
-import jdk.jfr.Unsigned;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Data
@@ -40,6 +39,9 @@ public class Video {
     @JoinColumn(name = "channel_id", nullable = false)
     private Channel channel;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "video", fetch = FetchType.LAZY)
+    private Set<Rating> channelsRating;
+
     public Video(String title, String description, String videoFile, Channel channel){
         this.title = title;
         this.description = description;
@@ -59,6 +61,7 @@ public class Video {
                 ", videoFile='" + videoFile + '\'' +
                 ", likes=" + likes +
                 ", dislikes=" + dislikes +
+                ", channel_id=" + channel.getId() +
                 '}';
     }
 }
