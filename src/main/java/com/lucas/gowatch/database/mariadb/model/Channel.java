@@ -1,16 +1,17 @@
 package com.lucas.gowatch.database.mariadb.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Data
 @NoArgsConstructor
-public class Channel {
+public class Channel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -41,6 +42,21 @@ public class Channel {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "channel", fetch = FetchType.LAZY)
     private Set<Rating> ratingVideos;
 
+    // Self-Relationship
+    // Channel is subscribed
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "subscribed",
+            joinColumns = { @JoinColumn(name = "channel_id", updatable = false, nullable = false) },
+            inverseJoinColumns = { @JoinColumn(name = "subscribed_channel_id", updatable = false, nullable = false) }
+    )
+    private Set<Channel> subscribed = new HashSet<>();
+
+    // Self-Relationship
+    // Channel has subscribers
+    @ManyToMany(mappedBy = "subscribed", fetch = FetchType.LAZY)
+    private Set<Channel> subscribers = new HashSet<>();
+
     public Channel(String username, String email, String password, String about,String location){
         this.username = username;
         this.email = email;
@@ -48,14 +64,6 @@ public class Channel {
         this.about = about;
         this.location = location;
         this.creationDate = LocalDate.now();
-    }
-
-    public Set<Video> getVideos(){
-        return videos;
-    }
-
-    public void setVideos(Set<Video> videos){
-        this.videos = videos;
     }
 
     @Override
