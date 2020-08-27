@@ -1,16 +1,18 @@
-package com.lucas.gowatch.database.mariadb.model;
+package com.lucas.gowatch.gateway.mariadb.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
 @Data
 @NoArgsConstructor
-public class Video {
+@Table(name = "video")
+public class VideoDBDomain implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,12 +39,12 @@ public class Video {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "channel_id", nullable = false, updatable = false)
-    private Channel channel;
+    private ChannelDBDomain channel;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "video", fetch = FetchType.LAZY)
-    private Set<Rating> channelsRating;
+    private Set<RatingDBDomain> channelsRating;
 
-    public Video(String title, String description, String videoFile, Channel channel){
+    public VideoDBDomain(String title, String description, String videoFile, ChannelDBDomain channel){
         this.title = title;
         this.description = description;
         this.uploadDate = LocalDate.now();
@@ -52,7 +54,7 @@ public class Video {
 
     @Override
     public String toString() {
-        return "Video{" +
+        return "VideoDBDomain{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", views=" + views +

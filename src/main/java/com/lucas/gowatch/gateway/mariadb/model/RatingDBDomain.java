@@ -1,32 +1,34 @@
-package com.lucas.gowatch.database.mariadb.model;
+package com.lucas.gowatch.gateway.mariadb.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Data
 @NoArgsConstructor
-public class Rating {
+@Table(name = "rating")
+public class RatingDBDomain implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false, updatable = false)
-    private Video video;
+    private VideoDBDomain video;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "channel_id", referencedColumnName = "id", nullable = false, updatable = false)
-    private Channel channel;
+    private ChannelDBDomain channel;
 
     @Column(nullable = false)
     private String type;
 
     // @type
     // Argument to be only "like" or "dislike"
-    public Rating(Video video, Channel channel, String type){
+    public RatingDBDomain(VideoDBDomain video, ChannelDBDomain channel, String type){
         setType(type);
         this.video = video;
         this.channel = channel;
@@ -43,7 +45,7 @@ public class Rating {
 
     @Override
     public String toString() {
-        return "Rating{" +
+        return "RatingDBDomain{" +
                 "video=" + video.getId() +
                 ", channel=" + channel.getId() +
                 ", type='" + type + '\'' +

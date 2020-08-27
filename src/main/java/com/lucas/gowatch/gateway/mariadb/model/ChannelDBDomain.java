@@ -1,4 +1,4 @@
-package com.lucas.gowatch.database.mariadb.model;
+package com.lucas.gowatch.gateway.mariadb.model;
 
 import lombok.*;
 
@@ -11,7 +11,8 @@ import java.util.Set;
 @Entity
 @Data
 @NoArgsConstructor
-public class Channel implements Serializable {
+@Table(name = "channel")
+public class ChannelDBDomain implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,41 +35,40 @@ public class Channel implements Serializable {
     private String location;
 
     @Column(nullable = false)
-    private LocalDate creationDate;
+    private LocalDate creationDate = LocalDate.now();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "channel", fetch = FetchType.LAZY)
-    private Set<Video> videos;
+    private Set<VideoDBDomain> videos;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "channel", fetch = FetchType.LAZY)
-    private Set<Rating> ratingVideos;
+    private Set<RatingDBDomain> ratingVideos;
 
     // Self-Relationship
-    // Channel is subscribed
+    // ChannelDBDomain is subscribed
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(
             name = "subscribed",
             joinColumns = { @JoinColumn(name = "channel_id", updatable = false, nullable = false) },
             inverseJoinColumns = { @JoinColumn(name = "subscribed_channel_id", updatable = false, nullable = false) }
     )
-    private Set<Channel> subscribed = new HashSet<>();
+    private Set<ChannelDBDomain> subscribed = new HashSet<>();
 
     // Self-Relationship
-    // Channel has subscribers
+    // ChannelDBDomain has subscribers
     @ManyToMany(mappedBy = "subscribed", fetch = FetchType.LAZY)
-    private Set<Channel> subscribers = new HashSet<>();
+    private Set<ChannelDBDomain> subscribers = new HashSet<>();
 
-    public Channel(String username, String email, String password, String about,String location){
+    public ChannelDBDomain(String username, String email, String password, String about, String location){
         this.username = username;
         this.email = email;
         this.password = password;
         this.about = about;
         this.location = location;
-        this.creationDate = LocalDate.now();
     }
 
     @Override
     public String toString() {
-        return "Channel{" +
+        return "ChannelDBDomain{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
