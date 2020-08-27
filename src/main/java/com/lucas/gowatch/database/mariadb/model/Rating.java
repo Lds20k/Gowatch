@@ -14,11 +14,11 @@ public class Rating {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "video_id", referencedColumnName = "id", nullable = false, updatable = false)
     private Video video;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "channel_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "channel_id", referencedColumnName = "id", nullable = false, updatable = false)
     private Channel channel;
 
     @Column(nullable = false)
