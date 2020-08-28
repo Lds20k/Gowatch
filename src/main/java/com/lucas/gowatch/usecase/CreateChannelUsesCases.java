@@ -1,7 +1,7 @@
 package com.lucas.gowatch.usecase;
 
 import com.lucas.gowatch.entity.Channel;
-import com.lucas.gowatch.gateway.CreateChannelGataway;
+import com.lucas.gowatch.gateway.CreateChannelGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 public class CreateChannelUsesCases{
 
     @Autowired
-    private CreateChannelGataway channelGataway;
+    private CreateChannelGateway gateway;
 
     public Channel execute(Channel channel) {
-        return channelGataway.execute(channel).get();
+        return gateway.execute(channel).get();
     }
 }

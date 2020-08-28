@@ -4,15 +4,15 @@ import com.lucas.gowatch.controller.model.ChannelRequest;
 import com.lucas.gowatch.controller.model.ChannelResponse;
 import com.lucas.gowatch.controller.mapper.Translator;
 import com.lucas.gowatch.entity.Channel;
+import com.lucas.gowatch.gateway.ConsultAllChannelsGateway;
 import com.lucas.gowatch.usecase.CreateChannelUsesCases;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path="/channel")
@@ -21,12 +21,20 @@ public class ChannelController {
 
     @Autowired
     private CreateChannelUsesCases createChannelUsesCases;
+    @Autowired
+    private ConsultAllChannelsGateway consultAllChannelsUseCase;
 
     @PostMapping
     public ResponseEntity<ChannelResponse> createChannel(@RequestBody ChannelRequest channelRequest){
         Channel channel = Translator.translate(channelRequest, Channel.class);
         ChannelResponse channelResponse = Translator.translate(createChannelUsesCases.execute(channel), ChannelResponse.class);
-        ResponseEntity<ChannelResponse> response = new ResponseEntity<>(channelResponse, HttpStatus.CREATED);
-        return response;
+        return new ResponseEntity<>(channelResponse, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity< List<ChannelResponse> > getChannels(){
+        @SuppressWarnings("unchecked")
+        List<ChannelResponse> channelResponseList = Translator.translate(consultAllChannelsUseCase.execute(), ChannelResponse.class);
+        return new ResponseEntity<>(channelResponseList, HttpStatus.OK);
     }
 }

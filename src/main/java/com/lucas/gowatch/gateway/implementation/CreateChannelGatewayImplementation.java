@@ -1,7 +1,7 @@
-package com.lucas.gowatch.gateway.Impl;
+package com.lucas.gowatch.gateway.implementation;
 
 import com.lucas.gowatch.controller.mapper.Translator;
-import com.lucas.gowatch.gateway.CreateChannelGataway;
+import com.lucas.gowatch.gateway.CreateChannelGateway;
 import com.lucas.gowatch.entity.Channel;
 import com.lucas.gowatch.gateway.mariadb.model.ChannelDBDomain;
 import com.lucas.gowatch.gateway.mariadb.repository.ChannelRepository;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class CreateChannelGatawayImpl implements CreateChannelGataway {
+public class CreateChannelGatewayImplementation implements CreateChannelGateway {
 
     @Autowired
     private ChannelRepository repository;
@@ -19,7 +19,6 @@ public class CreateChannelGatawayImpl implements CreateChannelGataway {
     @Override
     public Optional<Channel> execute(Channel channel) {
         ChannelDBDomain channelDBDomain = repository.save(Translator.translate(channel, ChannelDBDomain.class));
-        Channel channelOut = Translator.translate(channelDBDomain, Channel.class);
-        return Optional.of(channelOut);
+        return Optional.of(Translator.translate(channelDBDomain, Channel.class));
     }
 }
