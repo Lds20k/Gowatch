@@ -47,9 +47,9 @@ public class VideoDBDomain implements Serializable {
     public VideoDBDomain(String title, String description, String videoFile, ChannelDBDomain channel){
         this.title = title;
         this.description = description;
-        this.uploadDate = LocalDate.now();
         this.videoFile = videoFile;
         this.channel = channel;
+        this.uploadDate = LocalDate.now();
     }
 
     @Override

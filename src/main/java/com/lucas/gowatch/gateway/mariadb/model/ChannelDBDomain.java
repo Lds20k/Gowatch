@@ -35,7 +35,7 @@ public class ChannelDBDomain implements Serializable {
     private String location;
 
     @Column(nullable = false)
-    private LocalDate creationDate = LocalDate.now();
+    private LocalDate creationDate;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "channel", fetch = FetchType.LAZY)
     private Set<VideoDBDomain> videos;
@@ -64,6 +64,7 @@ public class ChannelDBDomain implements Serializable {
         this.password = password;
         this.about = about;
         this.location = location;
+        this.creationDate = LocalDate.now();
     }
 
     @Override

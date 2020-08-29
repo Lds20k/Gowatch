@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CreateChannelUsesCases{
+public class CreateChannelUsesCase {
 
     @Autowired
     private CreateChannelGateway gateway;
 
     public Channel execute(Channel channel) {
-        return gateway.execute(channel).get();
+        return gateway.execute(channel);
     }
 }

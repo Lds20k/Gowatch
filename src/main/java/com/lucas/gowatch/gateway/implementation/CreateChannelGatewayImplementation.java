@@ -8,6 +8,7 @@ import com.lucas.gowatch.gateway.mariadb.repository.ChannelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Component
@@ -17,8 +18,9 @@ public class CreateChannelGatewayImplementation implements CreateChannelGateway 
     private ChannelRepository repository;
 
     @Override
-    public Optional<Channel> execute(Channel channel) {
+    public Channel execute(Channel channel) {
+        channel.setCreationDate(LocalDate.now());
         ChannelDBDomain channelDBDomain = repository.save(Translator.translate(channel, ChannelDBDomain.class));
-        return Optional.of(Translator.translate(channelDBDomain, Channel.class));
+        return Translator.translate(channelDBDomain, Channel.class);
     }
 }

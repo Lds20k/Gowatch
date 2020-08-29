@@ -1,0 +1,22 @@
+spring:
+    datasource:
+        url: jdbc:mariadb://localhost:3306/gowatch
+        username: root
+        password: hash
+        driver-class-name: org.mariadb.jdbc.Driver
+
+
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+
+    servlet:
+        multipart:
+            max-file-size: 10MB
+
+    jackson:
+        default-property-inclusion: NON_NULL
+
+storage:
+    location: ./public/videos
