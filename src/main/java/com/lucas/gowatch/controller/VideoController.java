@@ -5,6 +5,7 @@ import com.lucas.gowatch.controller.model.VideoResponse;
 import com.lucas.gowatch.entity.Channel;
 import com.lucas.gowatch.entity.Video;
 import com.lucas.gowatch.service.StorageService;
+import com.lucas.gowatch.usecase.ConsultOneVideoUseCase;
 import com.lucas.gowatch.usecase.CreateVideoUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,9 @@ public class VideoController {
 
     @Autowired
     private CreateVideoUseCase createVideoUseCase;
+
+    @Autowired
+    private ConsultOneVideoUseCase consultOneVideoUseCase;
 
     @RequestMapping(method = RequestMethod.POST, consumes = {"multipart/form-data"})
     public ResponseEntity<VideoResponse> createVideo(
@@ -53,7 +57,7 @@ public class VideoController {
         return new ResponseEntity<>(videoResponse, HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/stream/{video}")
+    @GetMapping(path = "/stream/{video}")
     public StreamingResponseBody videoResource(@PathVariable("video") String videoName, HttpServletResponse response) throws FileNotFoundException{
         File videoFile = new File("public/videos/" + videoName);
         final InputStream videoFileStream = new FileInputStream(videoFile);
@@ -71,6 +75,13 @@ public class VideoController {
         }
         os.flush();
     }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<VideoResponse> consultOneVideo(@PathVariable("id") Long id){
+        VideoResponse videoResponse = Translator.translate(consultOneVideoUseCase.execute(id), VideoResponse.class);
+        return new ResponseEntity<>(videoResponse, HttpStatus.FOUND);
+    }
+
 
 
 }

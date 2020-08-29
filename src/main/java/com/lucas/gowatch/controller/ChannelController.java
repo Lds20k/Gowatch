@@ -17,7 +17,7 @@ import java.util.List;
 
 @Component
 @RestController
-@RequestMapping(path="/channel")
+@RequestMapping(path = "/channel")
 public class ChannelController {
 
     @Autowired
