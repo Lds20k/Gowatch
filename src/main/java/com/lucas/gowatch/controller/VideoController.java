@@ -5,6 +5,7 @@ import com.lucas.gowatch.controller.model.VideoResponse;
 import com.lucas.gowatch.entity.Channel;
 import com.lucas.gowatch.entity.Video;
 import com.lucas.gowatch.service.StorageService;
+import com.lucas.gowatch.usecase.ConsultAllVideosUseCase;
 import com.lucas.gowatch.usecase.ConsultOneVideoUseCase;
 import com.lucas.gowatch.usecase.CreateVideoUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.List;
 
 @Component
 @RestController
@@ -28,6 +30,9 @@ public class VideoController {
 
     @Autowired
     private CreateVideoUseCase createVideoUseCase;
+
+    @Autowired
+    private ConsultAllVideosUseCase consultAllVideoUseCase;
 
     @Autowired
     private ConsultOneVideoUseCase consultOneVideoUseCase;
@@ -74,6 +79,12 @@ public class VideoController {
             os.write(data, 0, read);
         }
         os.flush();
+    }
+
+    @GetMapping()
+    public ResponseEntity< List<VideoResponse> > consultOneVideo(){
+        List<VideoResponse> videoResponseList = Translator.translate(consultAllVideoUseCase.execute(), VideoResponse.class);
+        return new ResponseEntity<>(videoResponseList, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
