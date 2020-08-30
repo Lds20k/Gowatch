@@ -7,10 +7,7 @@ import com.lucas.gowatch.controller.model.GenericResponse;
 import com.lucas.gowatch.controller.model.SubscribeRequest;
 import com.lucas.gowatch.entity.Channel;
 import com.lucas.gowatch.entity.Subscribe;
-import com.lucas.gowatch.usecase.ConsultAllChannelsUseCase;
-import com.lucas.gowatch.usecase.ConsultOneChannelUseCase;
-import com.lucas.gowatch.usecase.CreateChannelUsesCase;
-import com.lucas.gowatch.usecase.SubscribeChannelUseCase;
+import com.lucas.gowatch.usecase.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +33,9 @@ public class ChannelController {
     @Autowired
     private SubscribeChannelUseCase subscribeChannelUseCase;
 
+    @Autowired
+    private ConsultChannelSubscriptionsUseCase consultChannelSubscriptionsUseCase;
+
     @PostMapping
     public ResponseEntity<ChannelResponse> createChannel(@RequestBody ChannelRequest channelRequest){
         Channel channel = Translator.translate(channelRequest, Channel.class);
@@ -59,5 +59,11 @@ public class ChannelController {
     public ResponseEntity<GenericResponse> subscribeChannel(@RequestBody SubscribeRequest subscribeRequest){
         String response = subscribeChannelUseCase.execute(Translator.translate(subscribeRequest, Subscribe.class));
         return new ResponseEntity<>(new GenericResponse(response), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/subscribe/{id}")
+    public ResponseEntity< List<ChannelResponse> > consultChannelSubscriptions(@PathVariable Long id){
+        List<ChannelResponse> channelResponseList = Translator.translate(consultChannelSubscriptionsUseCase.execute(id), ChannelResponse.class);
+        return new ResponseEntity<>(channelResponseList, HttpStatus.OK);
     }
 }

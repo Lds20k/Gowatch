@@ -116,7 +116,7 @@ class GowatchPersistTest {
         channelRepository.insertSubscribed(this.channel, anotherChannel1);
         channelRepository.insertSubscribed(this.channel, anotherChannel2);
 
-        Set<ChannelDBDomain> found = channelRepository.findSubscribedChannels(this.channel);
+        Set<ChannelDBDomain> found = channelRepository.findChannelSubscription(this.channel);
 
         Set<ChannelDBDomain> expected = new HashSet<>();
         expected.add(anotherChannel1);

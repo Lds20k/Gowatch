@@ -18,16 +18,16 @@ public class SubscribeChannelGatewayImplementation implements SubscribeChannelGa
     // Increment subscribers counter and insert in subscribed table
     @Override
     public String subscribe(Subscribe subscribe) {
-        repository.incrementSubscribersCounter(subscribe.getSubscribed());
         repository.insertSubscribed(subscribe.getChannel(), subscribe.getSubscribed());
+        repository.incrementSubscribersCounter(subscribe.getSubscribed());
         return "subscribed";
     }
 
     // Decrement subscribers counter and delete from subscribed table
     @Override
     public String unsubscribe(Subscribe subscribe) {
-        repository.decrementSubscribersCounter(subscribe.getSubscribed());
         repository.deleteSubscribed(subscribe.getChannel(), subscribe.getSubscribed());
+        repository.decrementSubscribersCounter(subscribe.getSubscribed());
         return "unsubscribed";
     }
 

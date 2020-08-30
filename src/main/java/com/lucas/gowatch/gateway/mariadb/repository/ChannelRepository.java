@@ -51,7 +51,12 @@ public interface ChannelRepository extends CrudRepository<ChannelDBDomain, Long>
             value = "select channel.* from subscribed inner join channel on subscribed.subscribed_channel_id = channel.id where subscribed.channel_id = :channel",
             nativeQuery = true
     )
-    Set<ChannelDBDomain> findSubscribedChannels(@Param("channel") ChannelDBDomain channel);
+    Set<ChannelDBDomain> findChannelSubscription(@Param("channel") ChannelDBDomain channel);
+    @Query(
+            value = "select channel.* from subscribed inner join channel on subscribed.subscribed_channel_id = channel.id where subscribed.channel_id = :channel",
+            nativeQuery = true
+    )
+    Iterable<ChannelDBDomain> findChannelSubscription(@Param("channel") Long channel);
 
     // Find a subscription
     // Because the subscribed is an attribute of ChannelDBDomain its necessary make a inner join
