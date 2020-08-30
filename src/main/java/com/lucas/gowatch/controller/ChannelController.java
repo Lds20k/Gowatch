@@ -36,6 +36,9 @@ public class ChannelController {
     @Autowired
     private ConsultChannelSubscriptionsUseCase consultChannelSubscriptionsUseCase;
 
+    @Autowired
+    private UpdateChannelUseCase updateChannelUseCase;
+
     @PostMapping
     public ResponseEntity<ChannelResponse> createChannel(@RequestBody ChannelRequest channelRequest){
         Channel channel = Translator.translate(channelRequest, Channel.class);
@@ -47,6 +50,13 @@ public class ChannelController {
     public ResponseEntity< List<ChannelResponse> > consultAllChannels(){
         List<ChannelResponse> channelResponseList = Translator.translate(consultAllChannelsUseCase.execute(), ChannelResponse.class);
         return new ResponseEntity<>(channelResponseList, HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<ChannelResponse> updateChannel(@RequestBody ChannelRequest channelRequest){
+        Channel channel = updateChannelUseCase.execute(Translator.translate(channelRequest, Channel.class));
+        ChannelResponse channelResponse = Translator.translate(channel, ChannelResponse.class);
+        return new ResponseEntity<>(channelResponse, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")

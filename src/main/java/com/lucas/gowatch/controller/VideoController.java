@@ -50,7 +50,9 @@ public class VideoController {
             @RequestParam("channel_id") Long channelId,
             @RequestParam("title") String title,
             @RequestParam("description") String description
-    ){
+    ) {
+        if(title.isEmpty()) throw new IllegalArgumentException();
+
         // Create channel and video entity
         Channel creator = new Channel();
         creator.setId(channelId);
@@ -70,7 +72,7 @@ public class VideoController {
     }
 
     @GetMapping(path = "/stream/{video}")
-    public StreamingResponseBody videoResource(@PathVariable("video") String videoName, HttpServletResponse response) throws FileNotFoundException{
+    public StreamingResponseBody videoResource(@PathVariable("video") String videoName, HttpServletResponse response) throws FileNotFoundException {
         File videoFile = new File("public/videos/" + videoName);
         final InputStream videoFileStream = new FileInputStream(videoFile);
         return (os) -> readAndWrite(videoFileStream, os);
