@@ -1,6 +1,5 @@
 package com.lucas.gowatch.gateway.mariadb.repository;
 
-
 import com.lucas.gowatch.gateway.mariadb.model.ChannelDBDomain;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -65,6 +64,14 @@ public interface ChannelRepository extends CrudRepository<ChannelDBDomain, Long>
             nativeQuery = true
     )
     Optional<ChannelDBDomain> findSubscription(@Param("channelId") Long channel,@Param("subscribedChannelId") Long subscribeChannel);
+
+    // Delete subscriptions
+    @Query(value = "delete from subscribed where channel_id = :channel", nativeQuery = true)
+    void deleteSubscriptions(@Param("channel") ChannelDBDomain channel);
+
+    // Delete subscribers
+    @Query(value = "delete from subscribed where subscribed_channel_id = :subscribers_channel", nativeQuery = true)
+    void deleteSubscribers(@Param("subscribers_channel") ChannelDBDomain subscribersChannel);
 
     // Find by email
     @Query(value = "select * from channel where email = :email", nativeQuery = true)

@@ -39,6 +39,9 @@ public class ChannelController {
     @Autowired
     private UpdateChannelUseCase updateChannelUseCase;
 
+    @Autowired
+    private DeleteChannelUseCase deleteChannelUseCase;
+
     @PostMapping
     public ResponseEntity<ChannelResponse> createChannel(@RequestBody ChannelRequest channelRequest){
         Channel channel = Translator.translate(channelRequest, Channel.class);
@@ -57,6 +60,12 @@ public class ChannelController {
         Channel channel = updateChannelUseCase.execute(Translator.translate(channelRequest, Channel.class));
         ChannelResponse channelResponse = Translator.translate(channel, ChannelResponse.class);
         return new ResponseEntity<>(channelResponse, HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<GenericResponse> deleteChannel(@PathVariable Long id){
+        String response = deleteChannelUseCase.execute(id);
+        return new ResponseEntity<>(new GenericResponse(response), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")

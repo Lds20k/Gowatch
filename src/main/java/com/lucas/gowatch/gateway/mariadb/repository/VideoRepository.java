@@ -27,4 +27,8 @@ public interface VideoRepository extends CrudRepository<VideoDBDomain, Long> {
     // Decrement rating dislike counter
     @Query(value = "update video set dislikes = dislikes - 1 where id = :video", nativeQuery = true)
     void decrementRatingDislike(@Param("video") Long video);
+
+    // Delete rating by channel
+    @Query(value = "delete from video where channel_id = :channel", nativeQuery = true)
+    void deleteByChannel(@Param("channel") ChannelDBDomain channelDBDomain);
 }
