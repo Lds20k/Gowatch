@@ -8,10 +8,7 @@ import com.lucas.gowatch.entity.Channel;
 import com.lucas.gowatch.entity.Rating;
 import com.lucas.gowatch.entity.Video;
 import com.lucas.gowatch.service.StorageService;
-import com.lucas.gowatch.usecase.ConsultAllVideosUseCase;
-import com.lucas.gowatch.usecase.ConsultOneVideoUseCase;
-import com.lucas.gowatch.usecase.CreateVideoUseCase;
-import com.lucas.gowatch.usecase.RateVideoUseCase;
+import com.lucas.gowatch.usecase.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +40,9 @@ public class VideoController {
 
     @Autowired
     private RateVideoUseCase rateVideoUseCase;
+
+    @Autowired
+    private RemoveRateVideoUseCase removeRateVideoUseCase;
 
     @RequestMapping(method = RequestMethod.POST, consumes = {"multipart/form-data"})
     public ResponseEntity<VideoResponse> createVideo(
@@ -106,5 +106,10 @@ public class VideoController {
         return new ResponseEntity<>(new GenericResponse(response), HttpStatus.OK);
     }
 
+    @DeleteMapping(path = "/rating")
+    public ResponseEntity<GenericResponse> removeRateVideo(@RequestBody RatingRequest ratingRequest){
+        String response = removeRateVideoUseCase.execute(Translator.translate(ratingRequest, Rating.class));
+        return new ResponseEntity<>(new GenericResponse(response), HttpStatus.OK);
+    }
 
 }

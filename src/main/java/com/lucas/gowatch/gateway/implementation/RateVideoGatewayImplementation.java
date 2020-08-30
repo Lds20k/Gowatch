@@ -23,8 +23,8 @@ public class RateVideoGatewayImplementation implements RateVideoGateway {
     */
     @Override
     public String execute(Rating rating) {
-        System.out.println(repository.findByChannelAndVideo(rating.getVideo(), rating.getChannel()));
-        if(repository.findByChannelAndVideo(rating.getVideo(), rating.getChannel()).isEmpty()){
+        System.out.println(repository.findByVideoAndChannel(rating.getVideo(), rating.getChannel()));
+        if(repository.findByVideoAndChannel(rating.getVideo(), rating.getChannel()).isEmpty()){
             repository.save(new RatingDBDomain(rating.getVideo(), rating.getChannel(), rating.getType()));
 
             if(rating.getType().equals("like"))
@@ -33,7 +33,7 @@ public class RateVideoGatewayImplementation implements RateVideoGateway {
                 videoRepository.incrementDislike(rating.getVideo());
 
         }else{
-            RatingDBDomain ratingDBDomain = repository.findByChannelAndVideo(rating.getVideo(), rating.getChannel()).get();
+            RatingDBDomain ratingDBDomain = repository.findByVideoAndChannel(rating.getVideo(), rating.getChannel()).get();
             if(!rating.getType().equals(ratingDBDomain.getType())){
                 ratingDBDomain.setType(rating.getType());
                 repository.save(ratingDBDomain);

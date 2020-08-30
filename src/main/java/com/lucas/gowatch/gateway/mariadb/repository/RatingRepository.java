@@ -13,5 +13,5 @@ public interface RatingRepository extends CrudRepository<RatingDBDomain, Long> {
     Optional<RatingDBDomain> findByChannel(@Param("channel") ChannelDBDomain channel);
 
     @Query(value = "select * from rating where channel_id = :channel and video_id = :video", nativeQuery = true)
-    Optional<RatingDBDomain> findByChannelAndVideo(@Param("video") Long video, @Param("channel") Long channel);
+    Optional<RatingDBDomain> findByVideoAndChannel(@Param("video") Long video, @Param("channel") Long channel);
 }
