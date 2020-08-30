@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface VideoRepository extends CrudRepository<VideoDBDomain, Long> {
     @Query(value = "select * from video where channel_id = :channel", nativeQuery = true)
-    Optional<VideoDBDomain> findByChannel(@Param("channel") ChannelDBDomain channel);
+    Optional< Iterable<VideoDBDomain> > findByChannel(@Param("channel") ChannelDBDomain channel);
 
     // Increment rating like counter
     @Query(value = "update video set likes = likes + 1 where id = :video", nativeQuery = true)

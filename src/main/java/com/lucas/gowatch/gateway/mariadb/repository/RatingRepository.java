@@ -18,4 +18,8 @@ public interface RatingRepository extends CrudRepository<RatingDBDomain, Long> {
     // Delete rating by channel
     @Query(value = "delete from rating where channel_id = :channel", nativeQuery = true)
     void deleteByChannel(@Param("channel") ChannelDBDomain channel);
+
+    // Delete rating by video id
+    @Query(value = "delete from rating where video_id = :video", nativeQuery = true)
+    void deleteByVideoId(@Param("video") Long id);
 }

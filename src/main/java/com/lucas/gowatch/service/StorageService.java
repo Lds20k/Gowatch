@@ -47,11 +47,19 @@ public class StorageService {
             InputStream inputStream = file.getInputStream();
             do
                 fileName = File.createTempFile("vdi", "").getName();
-            while (new File( this.uploadPath.toString() + '/' + fileName).exists());
+            while (new File( this.uploadPath.toString() + '\\' + fileName).exists());
             Files.copy(inputStream, this.uploadPath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
         }catch (IOException e){
             throw new StoreException("Filed to store file" + fileName, e);
         }
         return fileName;
+    }
+
+    // Delete file
+    public boolean delete(String fileName){
+        String filePath = this.uploadPath.toString() + '\\' + fileName;
+        File toDelete = new File(filePath);
+        System.out.println("Removed: " + filePath);
+        return toDelete.delete();
     }
 }

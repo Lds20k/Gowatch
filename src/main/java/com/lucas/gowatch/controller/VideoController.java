@@ -1,5 +1,6 @@
 package com.lucas.gowatch.controller;
 
+import com.lucas.gowatch.controller.exception.VideoCreateException;
 import com.lucas.gowatch.controller.mapper.Translator;
 import com.lucas.gowatch.controller.model.GenericResponse;
 import com.lucas.gowatch.controller.model.RatingRequest;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.server.PathParam;
 import java.io.*;
 import java.util.List;
 
@@ -44,13 +46,16 @@ public class VideoController {
     @Autowired
     private RemoveRateVideoUseCase removeRateVideoUseCase;
 
+    @Autowired
+    private DeleteVideoUseCase deleteVideoUseCase;
+
     @RequestMapping(method = RequestMethod.POST, consumes = {"multipart/form-data"})
     public ResponseEntity<VideoResponse> createVideo(
             @RequestParam("video") MultipartFile videoFile,
             @RequestParam("channel_id") Long channelId,
             @RequestParam("title") String title,
             @RequestParam("description") String description
-    ) {
+    ) throws VideoCreateException {
         if(title.isEmpty()) throw new IllegalArgumentException();
 
         // Create channel and video entity
@@ -65,9 +70,15 @@ public class VideoController {
         // Manage file
         String fileName = storageService.store(videoFile);
         video.setVideoFile(fileName);
+        VideoResponse videoResponse = null;
 
         // Response request
-        VideoResponse videoResponse = Translator.translate(createVideoUseCase.execute(video), VideoResponse.class);
+        try {
+            videoResponse = Translator.translate(createVideoUseCase.execute(video), VideoResponse.class);
+        }catch (Exception e){
+            storageService.delete(video.getVideoFile());
+            throw new VideoCreateException(e);
+        }
         return new ResponseEntity<>(videoResponse, HttpStatus.ACCEPTED);
     }
 
@@ -88,6 +99,7 @@ public class VideoController {
             os.write(data, 0, read);
         }
         os.flush();
+        is.close();
     }
 
     @GetMapping()
@@ -100,6 +112,12 @@ public class VideoController {
     public ResponseEntity<VideoResponse> consultOneVideo(@PathVariable("id") Long id){
         VideoResponse videoResponse = Translator.translate(consultOneVideoUseCase.execute(id), VideoResponse.class);
         return new ResponseEntity<>(videoResponse, HttpStatus.FOUND);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<GenericResponse> deleteVideo(@PathVariable("id") Long id){
+        String response = deleteVideoUseCase.execute(id);
+        return new ResponseEntity<>(new GenericResponse(response), HttpStatus.OK);
     }
 
     @PostMapping(path = "/rating")
