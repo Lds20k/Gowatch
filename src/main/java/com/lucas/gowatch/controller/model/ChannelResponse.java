@@ -12,6 +12,7 @@ public class ChannelResponse {
     private String username;
     private String email;
     private String password;
+    private String subscribersCounter;
     private String about;
     private String location;
     private String creationDate;

@@ -82,7 +82,7 @@ public class VideoController {
     }
 
     @GetMapping()
-    public ResponseEntity< List<VideoResponse> > consultOneVideo(){
+    public ResponseEntity< List<VideoResponse> > consultAllVideo(){
         List<VideoResponse> videoResponseList = Translator.translate(consultAllVideoUseCase.execute(), VideoResponse.class);
         return new ResponseEntity<>(videoResponseList, HttpStatus.OK);
     }

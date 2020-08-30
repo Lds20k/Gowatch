@@ -14,7 +14,7 @@ public class Channel {
     private String username;
     private String email;
     private String password;
-    private String subscribers_counter;
+    private String subscribersCounter;
     private String about;
     private String location;
     private LocalDate creationDate;
