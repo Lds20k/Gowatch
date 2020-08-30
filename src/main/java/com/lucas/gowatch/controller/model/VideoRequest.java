@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VideoRequest {
+    private Long id;
     private Channel channel;
     private String title;
     private String description;

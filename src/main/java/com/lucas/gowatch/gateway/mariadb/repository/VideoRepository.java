@@ -31,4 +31,8 @@ public interface VideoRepository extends CrudRepository<VideoDBDomain, Long> {
     // Delete rating by channel
     @Query(value = "delete from video where channel_id = :channel", nativeQuery = true)
     void deleteByChannel(@Param("channel") ChannelDBDomain channelDBDomain);
+
+    // Increment video view
+    @Query(value = "update video set views = views + 1 where id = :videoId", nativeQuery = true)
+    void incrementViews(@Param("videoId") Long videoId);
 }

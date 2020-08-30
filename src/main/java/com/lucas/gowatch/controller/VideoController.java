@@ -4,6 +4,7 @@ import com.lucas.gowatch.controller.exception.VideoCreateException;
 import com.lucas.gowatch.controller.mapper.Translator;
 import com.lucas.gowatch.controller.model.GenericResponse;
 import com.lucas.gowatch.controller.model.RatingRequest;
+import com.lucas.gowatch.controller.model.VideoRequest;
 import com.lucas.gowatch.controller.model.VideoResponse;
 import com.lucas.gowatch.entity.Channel;
 import com.lucas.gowatch.entity.Rating;
@@ -45,6 +46,9 @@ public class VideoController {
 
     @Autowired
     private RemoveRateVideoUseCase removeRateVideoUseCase;
+
+    @Autowired
+    private UpdateVideoUseCase updateVideoUseCase;
 
     @Autowired
     private DeleteVideoUseCase deleteVideoUseCase;
@@ -112,6 +116,13 @@ public class VideoController {
     public ResponseEntity<VideoResponse> consultOneVideo(@PathVariable("id") Long id){
         VideoResponse videoResponse = Translator.translate(consultOneVideoUseCase.execute(id), VideoResponse.class);
         return new ResponseEntity<>(videoResponse, HttpStatus.FOUND);
+    }
+
+    @PutMapping
+    public ResponseEntity<VideoResponse> updateVideo(@RequestBody VideoRequest videoRequest){
+        Video video = updateVideoUseCase.execute(Translator.translate(videoRequest, Video.class));
+        VideoResponse videoResponse = Translator.translate(video, VideoResponse.class);
+        return new ResponseEntity<>(videoResponse, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")

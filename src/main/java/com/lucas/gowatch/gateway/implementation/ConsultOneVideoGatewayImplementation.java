@@ -13,8 +13,10 @@ public class ConsultOneVideoGatewayImplementation implements ConsultOneVideoGate
     @Autowired
     VideoRepository repository;
 
+    // Increment views and consult a video by ID
     @Override
     public Video execute(Long id) {
+        repository.incrementViews(id);
         return Translator.translate(repository.findById(id).get(), Video.class);
     }
 }
