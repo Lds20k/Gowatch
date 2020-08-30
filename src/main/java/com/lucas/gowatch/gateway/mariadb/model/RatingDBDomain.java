@@ -36,6 +36,16 @@ public class RatingDBDomain implements Serializable {
 
     // @type
     // Argument to be only "like" or "dislike"
+    public RatingDBDomain(Long video, Long channel, String type){
+        setType(type);
+        this.video = new VideoDBDomain();
+        this.video.setId(video);
+        this.channel = new ChannelDBDomain();
+        this.channel.setId(channel);
+    }
+
+    // @type
+    // Argument to be only "like" or "dislike"
     public void setType(String type){
         if(type.equals("like") || type.equals("dislike"))
             this.type = type;

@@ -1,13 +1,17 @@
 package com.lucas.gowatch.controller;
 
 import com.lucas.gowatch.controller.mapper.Translator;
+import com.lucas.gowatch.controller.model.GenericResponse;
+import com.lucas.gowatch.controller.model.RatingRequest;
 import com.lucas.gowatch.controller.model.VideoResponse;
 import com.lucas.gowatch.entity.Channel;
+import com.lucas.gowatch.entity.Rating;
 import com.lucas.gowatch.entity.Video;
 import com.lucas.gowatch.service.StorageService;
 import com.lucas.gowatch.usecase.ConsultAllVideosUseCase;
 import com.lucas.gowatch.usecase.ConsultOneVideoUseCase;
 import com.lucas.gowatch.usecase.CreateVideoUseCase;
+import com.lucas.gowatch.usecase.RateVideoUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +40,9 @@ public class VideoController {
 
     @Autowired
     private ConsultOneVideoUseCase consultOneVideoUseCase;
+
+    @Autowired
+    private RateVideoUseCase rateVideoUseCase;
 
     @RequestMapping(method = RequestMethod.POST, consumes = {"multipart/form-data"})
     public ResponseEntity<VideoResponse> createVideo(
@@ -93,6 +100,11 @@ public class VideoController {
         return new ResponseEntity<>(videoResponse, HttpStatus.FOUND);
     }
 
+    @PostMapping(path = "/rating")
+    public ResponseEntity<GenericResponse> rateVideo(@RequestBody RatingRequest ratingRequest){
+        String response = rateVideoUseCase.execute(Translator.translate(ratingRequest, Rating.class));
+        return new ResponseEntity<>(new GenericResponse(response), HttpStatus.OK);
+    }
 
 
 }
